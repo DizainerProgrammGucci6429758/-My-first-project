@@ -11,6 +11,7 @@ Russian:
 Также в самой игре будут присутствовать кат-сцены, рисовать я их буду на планшете.
 Технологии, которые я буду использовать при создании игры, это Unity и C#.
 Я хочу создать такую игру, совместив милую рисовку главного героя и окружающей среды с нагнетающей атмосферой и музыкой.
+У меня уже есть наброски самого персонажа, леса и идеи для музыки. Остался сам процесс создания игры.
 
 English:
 I’m a beginner programmer; my goal is to create an interesting game, and in the process of creating it, to learn programming so that in the future I can create larger and more engaging projects.
@@ -24,3 +25,4 @@ Gameplay: the game is a 2D platformer, meaning there will be jumping, running, c
 The game itself will also feature cutscenes, which I will draw on a tablet.
 The technologies I will use to create the game are Unity and C#.
 I want to create a game that combines the cute art style of the main character and the environment with an intense atmosphere and music.
+I already have sketches of the character himself, the forest, and ideas for the music. All that’s left is the game‑making process itself.
