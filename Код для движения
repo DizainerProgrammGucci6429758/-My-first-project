@@ -1,1 +1,88 @@
+using UnityEngine;
 
+public class PlayerController : MonoBehaviour
+{
+    [Header("Настройки движения и инерции")]
+    [Tooltip("Максимальная скорость бега")]
+    public float moveSpeed = 7f;
+    
+    [Tooltip("Как быстро персонаж разгоняется")]
+    public float acceleration = 60f;
+    
+    [Tooltip("Как быстро персонаж останавливается (торможение)")]
+    public float deceleration = 80f;
+
+    [Header("Настройки прыжка и Coyote Time")]
+    [Tooltip("Сила прыжка")]
+    public float jumpForce = 14f;
+    
+    [Tooltip("Время койота (в секундах). Позволяет прыгнуть чуть позже, чем персонаж сошел с края")]
+    public float coyoteTime = 0.15f;
+    private float coyoteTimeCounter;
+
+    [Header("Проверка земли (Ground Check)")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+
+    private Animator animator;
+    private Rigidbody2D rb;
+    private float moveInput;
+    private bool isGrounded;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        moveInput = Input.GetAxisRaw("Horizontal");
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && coyoteTimeCounter > 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            coyoteTimeCounter = 0f; 
+        }
+
+        UpdateAnimations();
+    }
+
+    void FixedUpdate()
+    {
+        float targetSpeed = moveInput * moveSpeed;
+        float rate = (moveInput == 0) ? deceleration : acceleration;
+        float newSpeed = Mathf.MoveTowards(rb.velocity.x, targetSpeed, rate * Time.fixedDeltaTime);
+        rb.velocity = new Vector2(newSpeed, rb.velocity.y);
+    }
+
+    private void UpdateAnimations()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+            animator.SetBool("IsGrounded", isGrounded);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+    }
+}
